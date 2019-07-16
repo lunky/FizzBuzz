@@ -6,22 +6,22 @@ namespace FizzBuzzLib
 {
     public class FizzBuzz
     {
+        private const int DefaultUpperBound = 100;
+        public IEnumerable<string> GetFizzBuzz()
+        {
+            return GetFizzBuzz(DefaultUpperBound);
+        }
         public IEnumerable<string> GetFizzBuzz(int upperBound)
-        { 
+        {
             var defaultRules = new List<(int, string)>{
                 (3, "Fizz"),
-                (5, "Buzz"),
+                (5, "Buzz")
             };
             return GetFizzBuzz(upperBound, defaultRules);
         }
 
-        public IEnumerable<string> GetFizzBuzz(int upperBound, List<(int, string)> intStringTuples)
-        {
-            var rules = intStringTuples.Select(tuple => ((Func<int, bool>) (g => g % tuple.Item1 == 0), tuple.Item2));
-            return GetFizzBuzz(upperBound, rules.ToList());
-        }
 
-        public IEnumerable<string> GetFizzBuzz(int upperBound, List<(Func<int, bool>, string)> rules)
+        public IEnumerable<string> GetFizzBuzz(int upperBound, List<(int, string)> rules)
         {
             if (upperBound < 0)
             {
@@ -40,9 +40,12 @@ namespace FizzBuzzLib
         }
 
 
-        protected static string GetFbNumber(int inputNumber, List<(Func<int, bool>, string)> toFind)
+        protected static string GetFbNumber(int inputNumber, List<(int key, string value)> toFind)
         {
-           var found = toFind.Where(i => i.Item1(inputNumber)).Select(i=>i.Item2).ToList();
+            var found = toFind
+                .Where(i => inputNumber % i.key == 0)
+                .Select(i => i.value).ToList();
+
             return found.Any() ? string.Concat(found) : inputNumber.ToString();
         }
 
