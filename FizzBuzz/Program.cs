@@ -1,14 +1,13 @@
-﻿using FizzBuzzLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace FizzBuzzProgram
+namespace FizzBuzz
 {
     class Program
     {
         static void Main()
         {
-            var fb = new FizzBuzz();
+            var fb = new FizzBuzzLib.FizzBuzz();
             const int upperBound = 30;
 
             // original FizzBuzz

@@ -7,7 +7,7 @@ namespace FizzBuzzLib
     public class FizzBuzz
     {
         private const int DefaultUpperBound = 100;
-            private readonly IEnumerable<(int,string)> _defaultRules = 
+            private readonly List<(int,string)> _defaultRules = 
                 new List<(int, string)>{
                     (3, "Fizz"),
                     (5, "Buzz")
@@ -23,7 +23,7 @@ namespace FizzBuzzLib
             return GetFizzBuzz(upperBound, _defaultRules);
         }
 
-        public IEnumerable<string> GetFizzBuzz(int upperBound, IEnumerable<(int, string)> rules)
+        public IEnumerable<string> GetFizzBuzz(int upperBound, List<(int, string)> rules)
         {
             if (upperBound < 0)
             {
