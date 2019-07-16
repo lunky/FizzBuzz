@@ -7,21 +7,23 @@ namespace FizzBuzzLib
     public class FizzBuzz
     {
         private const int DefaultUpperBound = 100;
+            private readonly IEnumerable<(int,string)> _defaultRules = 
+                new List<(int, string)>{
+                    (3, "Fizz"),
+                    (5, "Buzz")
+                };
+
         public IEnumerable<string> GetFizzBuzz()
         {
             return GetFizzBuzz(DefaultUpperBound);
         }
+
         public IEnumerable<string> GetFizzBuzz(int upperBound)
         {
-            var defaultRules = new List<(int, string)>{
-                (3, "Fizz"),
-                (5, "Buzz")
-            };
-            return GetFizzBuzz(upperBound, defaultRules);
+            return GetFizzBuzz(upperBound, _defaultRules);
         }
 
-
-        public IEnumerable<string> GetFizzBuzz(int upperBound, List<(int, string)> rules)
+        public IEnumerable<string> GetFizzBuzz(int upperBound, IEnumerable<(int, string)> rules)
         {
             if (upperBound < 0)
             {
@@ -39,8 +41,7 @@ namespace FizzBuzzLib
             }
         }
 
-
-        protected static string GetFbNumber(int inputNumber, List<(int key, string value)> toFind)
+        protected static string GetFbNumber(int inputNumber, IEnumerable<(int key, string value)> toFind)
         {
             var found = toFind
                 .Where(i => inputNumber % i.key == 0)
@@ -48,6 +49,5 @@ namespace FizzBuzzLib
 
             return found.Any() ? string.Concat(found) : inputNumber.ToString();
         }
-
     }
 }

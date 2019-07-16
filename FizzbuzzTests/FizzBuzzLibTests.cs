@@ -80,12 +80,10 @@ namespace FizzBuzz.Tests
         }
 
         [Test]
-        public void Empty_collection_3_is_3()
+        public void Empty_collection_no_changes()
         {
-            var emptyList = new List<(int, string)>();
-            var actual = _sut.GetFizzBuzz(UpperBound, emptyList).ToList();
-            const string expected = "3";
-            Assert.AreEqual(expected, actual[2]);
+            var actual = _sut.GetFizzBuzz(UpperBound, new List<(int, string)>()).ToList();
+            Assert.AreEqual(actual, Enumerable.Range(1,UpperBound).Select(s=>s.ToString()) );
         }
 
         [Test]
@@ -98,17 +96,22 @@ namespace FizzBuzz.Tests
         }
 
         [Test]
-        public void Many_pairs()
+        public void Many_pairs_order_preserved()
         {
             var toFind = new List<(int, string)>
             {
-                (7, "mouse"),
-                (3, "taco"),
-                (15, "airplane"),
-                (22, "banana"),
+                (60, "Tuna"),
+                (7, "Mouse"),
+                (3, "Taco"),
+                (15, "Airplane"),
+                (22, "Banana"),
+                (30, "Doctor"),
+                (33, "Football"),
             };
             var actual = _sut.GetFizzBuzz(UpperBound, toFind).ToList();
-            Assert.AreEqual("tacoairplane", actual[14]);
+            Assert.AreEqual("TacoAirplane", actual[14]);
+            Assert.AreEqual("TacoAirplaneDoctor", actual[29]);
+            Assert.AreEqual("TunaTacoAirplaneDoctor", actual[59]);
         }
 
         [Test]
