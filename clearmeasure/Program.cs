@@ -10,13 +10,8 @@ namespace clearmeasure
         {
             var fb = new FizzBuzz();
             const int upperBound = 100;
-            var fbs = fb.GetFizzBuzz(upperBound);
-            foreach (var fizzBuzz in fbs)
-            {
-                Console.WriteLine(fizzBuzz);
-            }
-            var fbs2 = fb.GetFizzBuzz(upperBound, new List<(int,string)>{ (3,"fizz"), (5, "buzz")});
-            foreach (var fizzBuzz in fbs2)
+            var fizzBuzzes = fb.GetFizzBuzz(upperBound, new List<(int,string)>{ (3,"fizz"), (5, "buzz"), (30, "foo")});
+            foreach (var fizzBuzz in fizzBuzzes)
             {
                 Console.WriteLine(fizzBuzz);
             }

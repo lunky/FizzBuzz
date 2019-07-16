@@ -1,35 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 
 namespace FizzBuzzLib
 {
     public class FizzBuzz
     {
         public IEnumerable<string> GetFizzBuzz(int upperBound)
-        {
-            var defaultRules = new List<(Func<int, bool>, string)>{
-                (x=> x%3==0 && x%5==0, "Fizz Buzz"),
-                (x=> x%3==0, "Fizz"),
-                (x=> x%5==0, "Buzz"),
+        { 
+            var defaultRules = new List<(int, string)>{
+                (3, "Fizz"),
+                (5, "Buzz"),
             };
             return GetFizzBuzz(upperBound, defaultRules);
         }
+
         public IEnumerable<string> GetFizzBuzz(int upperBound, List<(int, string)> intStringTuples)
         {
-            var rules = new List<(Func<int, bool>, string)>
-            {
-                (g => (intStringTuples.Count>1 && intStringTuples.All(intStr => g % intStr.Item1 == 0)), 
-                    string.Concat(intStringTuples.Select( val => val.Item2)))
-            };
-            foreach (var (key, value) in intStringTuples)
-            {
-                rules.Add((g => g % key == 0, value));
-            }
-
-            return GetFizzBuzz(upperBound, rules);
+            var rules = intStringTuples.Select(tuple => ((Func<int, bool>) (g => g % tuple.Item1 == 0), tuple.Item2));
+            return GetFizzBuzz(upperBound, rules.ToList());
         }
 
         public IEnumerable<string> GetFizzBuzz(int upperBound, List<(Func<int, bool>, string)> rules)
@@ -53,7 +42,8 @@ namespace FizzBuzzLib
 
         protected static string GetFbNumber(int inputNumber, List<(Func<int, bool>, string)> toFind)
         {
-            return toFind.FirstOrDefault(i => i.Item1(inputNumber)).Item2 ?? inputNumber.ToString();
+           var found = toFind.Where(i => i.Item1(inputNumber)).Select(i=>i.Item2).ToList();
+            return found.Any() ? string.Concat(found) : inputNumber.ToString();
         }
 
     }

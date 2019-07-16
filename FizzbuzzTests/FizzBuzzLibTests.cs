@@ -2,10 +2,11 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
-namespace FizzbuzzTests
+namespace FizzBuzz.Tests
 {
-    public class Tests
+    public class FizzBuzzLibTests
     {
         private FizzBuzzLib.FizzBuzz _sut;
 
@@ -19,9 +20,7 @@ namespace FizzbuzzTests
         public void FizzBuzz_InvalidBoundCase()
         {
             const int upperBound = -1;
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            // QCW: ToList to trigger enumeration
-            Assert.Throws<ArgumentException>(() => _sut.GetFizzBuzz(upperBound).ToList());
+            Assert.Throws<ArgumentException>(() => _ = _sut.GetFizzBuzz(upperBound).ToList());
         }
 
 
@@ -57,7 +56,7 @@ namespace FizzbuzzTests
         {
             var upperBound = 100;
             var actual = _sut.GetFizzBuzz(upperBound).ToList();
-            var expected = "Fizz Buzz";
+            var expected = "FizzBuzz";
             Assert.AreEqual(expected, actual[14]);
         }
 
@@ -74,24 +73,24 @@ namespace FizzbuzzTests
         public void FizzBuzz_NullRules()
         {
             var upperBound = 100;
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            // QCW: ToList to trigger enumeration
             List<(Func<int, bool>, string)> rules = null;
-            Assert.Throws<ArgumentException>(() => _sut.GetFizzBuzz(upperBound,rules).ToList());
+            // ReSharper disable once ExpressionIsAlwaysNull
+            // QCW: ToList to trigger enumeration
+            Assert.Throws<ArgumentException>(() => _ = _sut.GetFizzBuzz(upperBound,rules).ToList());
         }
 
         [Test]
-        public void NumberReplacement_EmptyCollectionPassed()
+        public void FizzBuzz_EmptyCollectionPassed()
         {
             const int upperBound = 100;
             var emptyList = new List<(Func<int, bool>, string)>();
             var actual = _sut.GetFizzBuzz(upperBound, emptyList).ToList();
-            const string expected = "15";
-            Assert.AreEqual(expected, actual[14]);
+            const string expected = "3";
+            Assert.AreEqual(expected, actual[2]);
         }
 
         [Test]
-        public void NumberReplacement_CollectionWithOneFindsNumber()
+        public void FizzBuzz_CollectionWithOneFindsNumber()
         {
             const int upperBound = 100;
             const string expected = "taco";
@@ -101,35 +100,32 @@ namespace FizzbuzzTests
         }
 
         [Test]
-        public void NumberReplacement_CollectionWithMultipleFindsNumber()
+        public void FizzBuzz_CollectionWithMultipleExpressionsSetsNumber()
         {
             const int upperBound = 100;
-            const string expected = "airplane";
-            const int expectedNumber = 15;
             var toFind = new List<(Func<int, bool>, string)>
             {
-                (x=> x==3, "taco"),
-                (x=>x==expectedNumber, expected ),
-                (x=> x==22, "banana"),
+                (x=>x==3, "taco"),
+                (x=>x==15, "airplane"),
+                (x=>x==22, "banana"),
             };
             var actual = _sut.GetFizzBuzz(upperBound, toFind).ToList();
-            Assert.AreEqual(expected, actual[expectedNumber - 1]);
+            Assert.AreEqual("airplane", actual[14]);
         }
+
         [Test]
-        public void NumberReplacement_CollectionWithMultipleFindsNumber2()
+        public void FizzBuzz_CollectionWithKeyValuePair()
         {
             const int upperBound = 100;
-            const string expected = "airplane";
-            const int expectedNumber = 15;
             var toFind = new List<(int, string)>
             {
-                (expectedNumber, expected),
+                (15, "airplane"),
             };
             var actual = _sut.GetFizzBuzz(upperBound, toFind).ToList();
-            Assert.AreEqual(expected, actual[expectedNumber - 1]);
+            Assert.AreEqual("airplane", actual[14]);
         }
         [Test]
-        public void NumberReplacement_CollectionWithMultipleFindsNumber3()
+        public void FizzBuzz_CollectionWithMultipleFindsNumber3()
         {
             const int upperBound = 100;
             const string expected = "fizz";
@@ -145,7 +141,7 @@ namespace FizzbuzzTests
             Assert.AreEqual("fizzbuzz", actual[14]);
         }
         [Test]
-        public void NumberReplacement_CollectionWithMultipleFindsNumber4()
+        public void FizzBuzz_CollectionWithMultipleFindsNumber4()
         {
             const int upperBound = 100;
             const string expected = "fizz";
@@ -161,7 +157,7 @@ namespace FizzbuzzTests
             Assert.AreEqual("fizz", actual[2]);
         }
         [Test]
-        public void NumberReplacement_CollectionWithMultipleFindsNumber5()
+        public void FizzBuzz_CollectionWithMultipleFindsNumber5()
         {
             const int upperBound = 100;
 
@@ -175,8 +171,25 @@ namespace FizzbuzzTests
 
             Assert.AreEqual("buzz", actual[4]);
         }
+
         [Test]
-        public void NumberReplacement_CollectionWithMultipleFindsNumber6()
+        public void FizzBuzz_CollectionWithMultipleFindsPartialNumber()
+        {
+            const int upperBound = 200;
+
+            var toFind = new List<(int, string)>
+            {
+                (3, "fizz"),
+                (5, "buzz"),
+                (30, "foo"),
+            };
+            var actual = _sut.GetFizzBuzz(upperBound, toFind).ToList();
+
+            Assert.AreEqual("fizzbuzz", actual[14]);
+        }
+
+        [Test]
+        public void FizzBuzz_CollectionWithMultipleFindsNumber6()
         {
             const int upperBound = 200;
 
